@@ -25,7 +25,7 @@ export class Container extends React.Component {
     }
 
     render() {
-        let path = [...this.props.route];
+        let route = [...this.props.route];
         if (!this.props.loaded) {
             return <div>Loading...</div>
         }
@@ -40,10 +40,10 @@ export class Container extends React.Component {
         //     //         color={l.color} />
         //     // )
         // });
-        let coords = path.map((l) => { return l; });
+        let path = route.map((l) => { return l; });
         return (
             <div id="map-container" ref="container">
-                <Map google={this.props.google} coords={coords} />
+                <Map google={this.props.google} path={path} />
             </div>
         )
     }

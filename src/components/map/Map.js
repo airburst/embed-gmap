@@ -18,13 +18,13 @@ export class Map extends React.Component {
     static propTypes = {
         google: React.PropTypes.object,
         zoom: React.PropTypes.number,
-        coords: React.PropTypes.array,
+        path: React.PropTypes.array,
         initialCenter: React.PropTypes.object
     }
 
     static defaultProps = {
         zoom: 15,
-        coords: [],
+        path: [],
         initialCenter: {
             lat: 51.417163327836576,
             lng: -2.210025647776225
@@ -37,19 +37,17 @@ export class Map extends React.Component {
             this.loadMap();
         }
         // React to changes in route
-        //console.log('prevProps', prevProps)                                 //
-        if (prevProps.coords !== this.props.coords) {
+        if (prevProps.path !== this.props.path) {
             this.loadMap();
         }
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return nextProps.coords !== this.props.coords;
+        return nextProps.path !== this.props.path;
     }
 
     recenterMap(position) {
         const map = this.map;
-        //const curr = this.state.currentLocation;
         const google = this.props.google;
         const maps = google.maps;
         if (map) {
@@ -63,7 +61,6 @@ export class Map extends React.Component {
     }
 
     loadMap() {
-        console.log('Loading map with path', this.props.coords)     //
         if (this.props && this.props.google) {
             const {google} = this.props;
             const maps = google.maps;
@@ -82,13 +79,14 @@ export class Map extends React.Component {
             })
             this.map = new maps.Map(node, mapConfig);
 
-            this.scaleMap();
+            this.scaleMap();    // Optimise this pair of things
+            this.drawPath();
         }
     }
 
     scaleMap() {
         const bounds = new this.props.google.maps.LatLngBounds();
-        this.props.coords.forEach((c) => { this.scaleToFitNewMarker(bounds, c); });
+        this.props.path.forEach((c) => { this.scaleToFitNewMarker(bounds, c); });
     }
 
     scaleToFitNewMarker(bounds, marker) {
@@ -102,6 +100,18 @@ export class Map extends React.Component {
             bounds.extend(extendPoint2);
         }
         this.map.fitBounds(bounds);
+    }
+
+    drawPath() {
+        const route = new this.props.google.maps.Polyline({
+          path: this.props.path,
+          geodesic: true,
+          strokeColor: '#FF0000',
+          strokeOpacity: 1.0,
+          strokeWeight: 2
+        });
+
+        route.setMap(this.map);
     }
 
     render() {
