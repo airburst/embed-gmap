@@ -17,4 +17,4 @@ firebase.initializeApp(config);
 // Touch Tap Plugin
 injectTapEventPlugin();
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<App firebaseRef={firebase.database().ref('routes')}/>, document.getElementById('root'));

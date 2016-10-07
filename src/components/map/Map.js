@@ -58,24 +58,10 @@ export class Map extends React.Component {
     }
 
     componentDidMount() {
-        if (this.props.centerAroundCurrentLocation) {
-            if (navigator && navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition((pos) => {
-                    const coords = pos.coords;
-                    this.setState({
-                        currentLocation: {
-                            lat: coords.latitude,
-                            lng: coords.longitude
-                        }
-                    })
-                })
-            }
-        }
         this.loadMap();
     }
 
     loadMap() {
-        console.log('Reloading map')
         if (this.props && this.props.google) {
             const {google} = this.props;
             const maps = google.maps;

@@ -25,7 +25,8 @@ export class Container extends React.Component {
     }
 
     render() {
-        let locations = [...this.props.contacts, this.props.me];
+        // let locations = [...this.props.contacts, this.props.me];
+        let locations = [];
         if ((!this.props.loaded) || ((locations.length === 1) && locations[0].key === undefined)) {
             return <div>Loading...</div>
         }
