@@ -79,7 +79,7 @@ export class Map extends React.Component {
             })
             this.map = new maps.Map(node, mapConfig);
 
-            this.scaleMap();    // Optimise this pair of things
+            this.scaleMap();
             this.drawPath();
         }
     }
@@ -107,8 +107,8 @@ export class Map extends React.Component {
           path: this.props.path,
           geodesic: true,
           strokeColor: '#FF0000',
-          strokeOpacity: 1.0,
-          strokeWeight: 2
+          strokeOpacity: 0.9,
+          strokeWeight: 3
         });
 
         route.setMap(this.map);

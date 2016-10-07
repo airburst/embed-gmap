@@ -5,7 +5,7 @@ html, body {
 }
 
 #map-container {
-    height: 600px;
+    height: 80vh;
     width: 100%;
 }
 
