@@ -6,10 +6,11 @@ import App from './components/App';
 
 // Setup Firebase
 const config = {
-    apiKey: "AIzaSyDGe_FmSZBr74_Eo9rbe-Ld9r264Ay47hE",
-    authDomain: "proximo-55720.firebaseapp.com",
-    databaseURL: "https://proximo-55720.firebaseio.com",
+    apiKey: "AIzaSyBMbOcZ7egI9aZ7ZfFezrb_Tmof_kYCuvA",
+    authDomain: "routes-9cee1.firebaseapp.com",
+    databaseURL: "https://routes-9cee1.firebaseio.com",
     storageBucket: "",
+    messagingSenderId: "642114885858"
 };
 firebase.initializeApp(config);
 
