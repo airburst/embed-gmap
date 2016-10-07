@@ -36,15 +36,16 @@ export class Map extends React.Component {
         if (prevProps.google !== this.props.google) {
             this.loadMap();
         }
-        // React to changes in contacts' locations
-        // if (prevState.coords !== this.state.coords) {
-        //     this.loadMap();
-        // }
+        // React to changes in route
+        //console.log('prevProps', prevProps)                                 //
+        if (prevProps.coords !== this.props.coords) {
+            this.loadMap();
+        }
     }
 
-    // shouldComponentUpdate(nextProps, nextState) {
-    //     return nextProps.coords !== this.props.coords;
-    // }
+    shouldComponentUpdate(nextProps, nextState) {
+        return nextProps.coords !== this.props.coords;
+    }
 
     recenterMap(position) {
         const map = this.map;
@@ -62,6 +63,7 @@ export class Map extends React.Component {
     }
 
     loadMap() {
+        console.log('Loading map with path', this.props.coords)     //
         if (this.props && this.props.google) {
             const {google} = this.props;
             const maps = google.maps;

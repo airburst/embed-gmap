@@ -5,24 +5,21 @@ import {timeStamp} from '../utils';
 import Container from './map/Container';
 import Toolbar from './Toolbar';
 import ContactsList from './ContactsList';
-import NewUserDialog from './NewUserDialog';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 // class App extends Component {
 const App = React.createClass({
 
-    propTypes: { 
+    propTypes: {
         firebaseRef: React.PropTypes.object
     },
 
     getDefaultProps() {
-        return { };
+        return {};
     },
 
-    getInitialState: function () {
-        return {
-            route: {}
-        };
+    getInitialState() {
+        return { route: [] }
     },
 
     componentWillMount: function () {
@@ -30,10 +27,13 @@ const App = React.createClass({
     },
 
     getRouteFromFirebase: function () {
-        console.log(this.props.firebaseRef);           //
+        const self = this;
         const route = this.props.firebaseRef.child('rhayadar-route');
-        console.log(route);         //
-        // this.setState({route: route});
+        route.on("value", function (snapshot) {
+            self.setState({ route: snapshot.val().track[0].track });
+        }, function (errorObject) {
+            console.log("No route found..." + errorObject.code);
+        });
     },
 
     componentWillUnmount: function () {
@@ -44,7 +44,7 @@ const App = React.createClass({
         return (
             <MuiThemeProvider>
                 <div role="main" id="main">
-                    <Container />
+                    <Container route={this.state.route}/>
                     <Toolbar />
                 </div>
             </MuiThemeProvider>

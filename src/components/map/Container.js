@@ -25,33 +25,25 @@ export class Container extends React.Component {
     }
 
     render() {
-        // let locations = [...this.props.contacts, this.props.me];
-        let locations = [];
-        if ((!this.props.loaded) || ((locations.length === 1) && locations[0].key === undefined)) {
+        let path = [...this.props.route];
+        if (!this.props.loaded) {
             return <div>Loading...</div>
         }
-        let markers = locations.map((l) => {
-            return (
-                <Marker
-                    key = {l.key}
-                    onClick={this.onMarkerClick.bind(this) }
-                    name={l.name}
-                    position={l.position}
-                    color={l.color} />
-            )
-        });
-        let coords = locations.map((l) => { return l.position; });
+        // let markers = path.map((l) => {
+        //     return (<div/>)
+        //     // return (
+        //     //     <Marker
+        //     //         key = {l.key}
+        //     //         onClick={this.onMarkerClick.bind(this) }
+        //     //         name={l.name}
+        //     //         position={l.position}
+        //     //         color={l.color} />
+        //     // )
+        // });
+        let coords = path.map((l) => { return l; });
         return (
             <div id="map-container" ref="container">
-                <Map google={this.props.google} coords={coords}>
-                    {markers}
-                    <InfoWindow
-                        marker={this.state.activeMarker}
-                        visible={this.state.showingInfoWindow}
-                        onClose={this.onInfoWindowClose}>
-                        <div><h2>{this.state.selectedPlace.name}</h2></div>
-                    </InfoWindow>
-                </Map>
+                <Map google={this.props.google} coords={coords} />
             </div>
         )
     }
@@ -62,3 +54,13 @@ export default GoogleApiComponent({
     apiKey: 'AIzaSyDGe_FmSZBr74_Eo9rbe-Ld9r264Ay47hE',
     libraries: ['geometry']
 })(Container);
+
+// <Map google={this.props.google} coords={coords}>
+//     {markers}
+//     <InfoWindow
+//         marker={this.state.activeMarker}
+//         visible={this.state.showingInfoWindow}
+//         onClose={this.onInfoWindowClose}>
+//         <div><h2>{this.state.selectedPlace.name}</h2></div>
+//     </InfoWindow>
+// </Map>
