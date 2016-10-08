@@ -43,6 +43,7 @@ export class Marker extends Component {
         if (!(pos instanceof google.maps.LatLng)) {
             position = new google.maps.LatLng(pos.lat, pos.lng);
         }
+
         const markerStyle = {
             path: google.maps.SymbolPath.CIRCLE,
             fillColor: 'white',
@@ -98,8 +99,3 @@ Marker.defaultProps = {
 }
 
 export default Marker
-
-// private scaleToFit() {
-//     this.resetBounds();
-//     this.markers.forEach((m) => { this.scaleToFitNewMarker(m); });
-// }

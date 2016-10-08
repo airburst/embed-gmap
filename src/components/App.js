@@ -1,6 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import ReactDOM from 'react-dom';
 import Container from './map/Container';
+import {flatten} from '../utils';
 
 // class App extends Component {
 const App = React.createClass({
@@ -36,8 +37,8 @@ const App = React.createClass({
         const route = this.props.firebaseRef.child(routeName);
         route.on("value", function (snapshot) {
             if (snapshot.val() !== null) {
-                self.setState({ route: snapshot.val().track[0].track });
-                self.setState({ elevation: snapshot.val().elevation[0] });
+                self.setState({ route: self.extractTrackData(snapshot.val().track) });
+                self.setState({ elevation: flatten(snapshot.val().elevation) });
                 self.setState({ details: snapshot.val().details });
             }
         });
@@ -45,6 +46,18 @@ const App = React.createClass({
 
     componentWillUnmount: function () {
         this.firebaseRef.off();
+    },
+
+    extractTrackData(data) {
+        let track = [];
+        for (let d of data) { 
+            if (d.track !== undefined) {
+                track.push(d.track.map((pos) => { 
+                    return { lat: pos.lat, lng: pos.lon }
+                })); 
+            }
+        }
+        return flatten(track);
     },
 
     render: function () {

@@ -110,12 +110,22 @@ export class Map extends React.Component {
         const route = new this.props.google.maps.Polyline({
           path: this.props.path,
           geodesic: true,
-          strokeColor: '#FF0000',
+          strokeColor: '#C8042B',
           strokeOpacity: 0.9,
           strokeWeight: 3
         });
 
         route.setMap(this.map);
+        if (this.props.path.length > 0) { this.drawMarkers(this.props.path[0]); }
+    }
+
+    drawMarkers(pos) {
+        let position = new this.props.google.maps.LatLng(pos.lat, pos.lng);
+        let marker = new this.props.google.maps.Marker({
+            position: position,
+            map: this.map,
+            title: 'Start'
+        });
     }
 
     render() {
