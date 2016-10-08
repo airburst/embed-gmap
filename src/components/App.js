@@ -35,11 +35,11 @@ const App = React.createClass({
         const self = this;
         const route = this.props.firebaseRef.child(routeName);
         route.on("value", function (snapshot) {
-            self.setState({ route: snapshot.val().track[0].track });
-            self.setState({ elevation: snapshot.val().elevation[0] });
-            self.setState({ details: snapshot.val().details });
-        }, function (errorObject) {
-            console.log("No route found..." + errorObject.code);
+            if (snapshot.val() !== null) {
+                self.setState({ route: snapshot.val().track[0].track });
+                self.setState({ elevation: snapshot.val().elevation[0] });
+                self.setState({ details: snapshot.val().details });
+            }
         });
     },
 
