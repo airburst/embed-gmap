@@ -11,24 +11,29 @@ export class Container extends React.Component {
     
     componentDidMount() {
         this.setState({
-            showingInfoWindow: false,
-            activeMarker: {},
-            selectedPlace: {}
+            // showingInfoWindow: false,
+            // activeMarker: {},
+            // selectedPlace: {},
+            selectedPoint: null
         });
     }
 
-    onMarkerClick(props, marker, e) {
-        this.setState({
-            selectedPlace: props,
-            activeMarker: marker,
-            showingInfoWindow: true
-        });
+    // onMarkerClick(props, marker, e) {
+    //     this.setState({
+    //         selectedPlace: props,
+    //         activeMarker: marker,
+    //         showingInfoWindow: true
+    //     });
+    // }
+
+    showPoint = (index) => {
+        // this.setState({ selectedPoint: index });     // Triggers map reload!
     }
 
     render() {
         let route = [...this.props.route];
         let elevation = [...this.props.elevation];
-        if (!this.props.loaded) {                   // TODO: spinner
+        if (!this.props.loaded) {
             return <div>Loading...</div>
         }
         // let markers = path.map((l) => {
@@ -36,7 +41,6 @@ export class Container extends React.Component {
         //     // return (
         //     //     <Marker
         //     //         key = {l.key}
-        //     //         onClick={this.onMarkerClick.bind(this) }
         //     //         name={l.name}
         //     //         position={l.position}
         //     //         color={l.color} />
@@ -45,10 +49,15 @@ export class Container extends React.Component {
         let path = route.map((l) => { return l; });
         return (
             <div id="map-container" ref="container">
-                <Map google={this.props.google} path={path} />
+                <Map 
+                    google={this.props.google} 
+                    path={path}
+                    selectedPoint={this.state.selectedPoint} 
+                />
                 <RouteProfile 
                     elevationData={elevation}
-                    details={this.props.details} 
+                    details={this.props.details}
+                    showPoint={this.showPoint}
                 />
             </div>
         )
@@ -60,13 +69,3 @@ export default GoogleApiComponent({
     apiKey: 'AIzaSyDGe_FmSZBr74_Eo9rbe-Ld9r264Ay47hE',
     libraries: ['geometry']
 })(Container);
-
-// <Map google={this.props.google} coords={coords}>
-//     {markers}
-//     <InfoWindow
-//         marker={this.state.activeMarker}
-//         visible={this.state.showingInfoWindow}
-//         onClose={this.onInfoWindowClose}>
-//         <div><h2>{this.state.selectedPlace.name}</h2></div>
-//     </InfoWindow>
-// </Map>

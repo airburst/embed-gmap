@@ -11,13 +11,15 @@ class RouteProfile extends Component {
             width: 0,
             height: 0,
             xScale: d3.scale.linear().range([0, 0]),
-            yScale: d3.scale.linear().range([0, 0])
+            yScale: d3.scale.linear().range([0, 0]),
+            factor: 0
         };
     }
 
     static propTypes = {
         elevationData: React.PropTypes.array,
         details: React.PropTypes.object,
+        showPoint: React.PropTypes.func,
         margin: React.PropTypes.object
     }
 
@@ -27,22 +29,32 @@ class RouteProfile extends Component {
         margin: { top: 10, bottom: 20, left: 40, right: 0 }
     }
 
-    handleResize = (e) => {
-        this.setState({
-            width: document.getElementById('route-profile-container').clientWidth,
-            height: document.getElementById('route-profile-container').clientHeight
-        });
+    componentDidMount() {
+        this.setDimensions();
+        window.addEventListener('resize', this.handleResize);
     }
 
-    componentDidMount() {
-        const height = document.getElementById('route-profile-container').clientHeight;
-        const width = document.getElementById('route-profile-container').clientWidth;
-        this.setState({ height, width });
-        window.addEventListener('resize', this.handleResize);
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.elevationData !== this.props.elevationData) {
+            this.setDimensions();
+        }
     }
 
     componentWillUnmount() {
         window.removeEventListener('resize', this.handleResize);
+    }
+
+    setDimensions() {
+        const width = document.getElementById('route-profile-container').clientWidth;
+        const height = document.getElementById('route-profile-container').clientHeight;
+        const factor = (this.props.elevationData.length > 0) 
+            ? this.props.elevationData.length / (width - this.props.margin.left * 2)
+            : 0;
+        this.setState({ width, height, factor });
+    }
+
+    handleResize = (e) => {
+        this.setDimensions();
     }
 
     makeData() {
@@ -52,11 +64,35 @@ class RouteProfile extends Component {
         }
         let intervalDistance = distance / this.props.elevationData.length;
         return [{
-            
+            label: 'Elevation',
             values: this.props.elevationData.map((e, i) => { 
                 return { x: intervalDistance * i, y: e }
             })
         }];
+    }
+
+    makeEventsLayerStyle(width, height) {
+        return {
+            height: height + "px",
+            width: width + "px",
+            bottom: this.props.margin.bottom + "px"
+        };
+    }
+
+    handleMouseOver(e) {
+        // console.log('Mouse over')
+    }
+
+    handleMouseOut(e) {
+        this.props.showPoint(null);   // Hide the map point
+    }
+
+    handleMouseMove = (e) => {
+        let x = e.clientX - this.props.margin.left;
+        x = (x < 0) ? 0 : x;
+        let index = Math.floor(x * this.state.factor);
+        //let point = this.props.elevationData[index];
+        this.props.showPoint(index);
     }
 
     render() {
@@ -64,10 +100,10 @@ class RouteProfile extends Component {
         let height = this.state.height - this.props.margin.top - this.props.margin.bottom;
         width = (width < 0) ? 0 : width;
         height = (height < 0) ? 0 : height;
+        let eventsStyle = this.makeEventsLayerStyle(width, height);
 
         const AreaChart = ReactD3.AreaChart;
         let data = this.makeData();
-        let factor = data.length / width;
 
         return (
             <div className="route-profile-container" id="route-profile-container">
@@ -81,6 +117,13 @@ class RouteProfile extends Component {
                     xAxis={{innerTickSize: 10, label: "Distance (km) "}}
                     yAxis={{label: "Height (m) "}}
                 />
+                <div 
+                    className="event-layer"
+                    style={eventsStyle}
+                    onMouseOver={this.handleMouseOver}
+                    onMouseMove={this.handleMouseMove}
+                >
+                </div>
             </div>
         )
     }
@@ -89,51 +132,5 @@ class RouteProfile extends Component {
 
 export default RouteProfile;
 
-//                     x={xAccessor}
-//                     y={yAccessor}
-//                     values={valuesAccessor}
-//                     tooltipHtml={tooltipArea}
-
-
-// //     mouseMove(ev) {
-// let x = ev.clientX - this.margin.left,
-//     labelOffset = 10,
-//     labelRightBuffer = this.labelBox.width,
-//     labelX = ((x + labelOffset) < (this.chartWidth - labelRightBuffer)) ? 
-//         (x + labelOffset) : 
-//         (x - labelRightBuffer - labelOffset),
-//     labelY = (this.chartHeight / 2),
-//     index = Math.floor(x * this.factor),
-//     point = this.data[index],
-//     elevationText = 'Elevation: ' + point[1].toFixed(1),    //TODO: catch errors when no point
-//     distanceText = 'Distance: ' + point[0].toFixed(1);
-
-// // Draw the line and details box
-// d3.select('#focusLineX')
-//     .attr('x1', x).attr('y1', 0)
-//     .attr('x2', x).attr('y2', this.chartHeight);
-// d3.select('#focusLabelX').attr('transform', 'translate(' + labelX + ',' + labelY + ')');
-// d3.select('#elevation-text').text(elevationText);
-// d3.select('#distance-text').text(distanceText);
-
-// // Update the selected point (for route spot display)
-// this.store.dispatch({
-//     type: UPDATE_DETAILS,
-//     payload: { selectedPointIndex: index }
-// });
-// //     }
-    
-// //     mouseOut(ev) {
+// mouseOut(ev) {
 // d3.selectAll('#focusLineX, #focusLabelX').attr('style', 'display: none');
-
-// // Reset the selected point
-// this.store.dispatch({
-//     type: UPDATE_DETAILS,
-//     payload: { selectedPointIndex: -1 }
-// });
-// //     }
-    
-// //     mouseOver(ev) {
-// d3.selectAll('#focusLineX, #focusLabelX').attr('style', 'display: null');
-// //     }
-                
