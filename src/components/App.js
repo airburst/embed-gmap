@@ -14,7 +14,11 @@ const App = React.createClass({
     },
 
     getInitialState() {
-        return { route: [] }
+        return { 
+            route: [],
+            elevation: [],
+            details: {}
+        }
     },
 
     componentWillMount: function () {
@@ -26,6 +30,8 @@ const App = React.createClass({
         const route = this.props.firebaseRef.child('rhayadar-route');
         route.on("value", function (snapshot) {
             self.setState({ route: snapshot.val().track[0].track });
+            self.setState({ elevation: snapshot.val().elevation[0] });
+            self.setState({ details: snapshot.val().details });
         }, function (errorObject) {
             console.log("No route found..." + errorObject.code);
         });
@@ -38,7 +44,11 @@ const App = React.createClass({
     render: function () {
         return (
             <div role="main" id="main">
-                <Container route={this.state.route}/>
+                <Container 
+                    route={this.state.route} 
+                    elevation={this.state.elevation}
+                    details={this.state.details}
+                />
             </div>
         )
     }

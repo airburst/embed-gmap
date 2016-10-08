@@ -5,9 +5,10 @@ import GoogleApiComponent from './GoogleApiComponent';
 import Map from './Map';
 import Marker from './Marker';
 import InfoWindow from './InfoWindow';
+import RouteProfile from './RouteProfile';
 
 export class Container extends React.Component {
-
+    
     componentDidMount() {
         this.setState({
             showingInfoWindow: false,
@@ -26,7 +27,8 @@ export class Container extends React.Component {
 
     render() {
         let route = [...this.props.route];
-        if (!this.props.loaded) {
+        let elevation = [...this.props.elevation];
+        if (!this.props.loaded) {                   // TODO: spinner
             return <div>Loading...</div>
         }
         // let markers = path.map((l) => {
@@ -44,6 +46,10 @@ export class Container extends React.Component {
         return (
             <div id="map-container" ref="container">
                 <Map google={this.props.google} path={path} />
+                <RouteProfile 
+                    elevationData={elevation}
+                    details={this.props.details} 
+                />
             </div>
         )
     }
