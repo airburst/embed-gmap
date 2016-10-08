@@ -57,6 +57,8 @@ a {
 .event-layer {
     fill: transparent;
     cursor: crosshair;
+    position: absolute;
+    z-index: 10;
 }
         
 .focusLine {
