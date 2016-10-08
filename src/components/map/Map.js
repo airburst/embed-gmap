@@ -35,12 +35,10 @@ export class Map extends React.Component {
 
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.google !== this.props.google) {
-            console.log('Google changed')                       //
             this.loadMap();
         }
         // React to changes in route
         if (prevProps.path !== this.props.path) {
-            console.log('Path changed')                       //
             this.loadMap();
         }
     }
@@ -64,7 +62,6 @@ export class Map extends React.Component {
     }
 
     loadMap() {
-        console.log('Reloading map')                    //
         if (this.props && this.props.google) {
             const {google} = this.props;
             const maps = google.maps;
