@@ -21,13 +21,19 @@ const App = React.createClass({
         }
     },
 
-    componentWillMount: function () {
-        this.getRouteFromFirebase();
+    componentWillMount() {
+        let routeName = this.lastPathInUrl();
+        if (routeName !== '') { this.getRouteFromFirebase(routeName); }
     },
 
-    getRouteFromFirebase: function () {
+    lastPathInUrl() {
+        let parts = window.location.pathname.split('/');
+        return parts[parts.length - 1];
+    },
+
+    getRouteFromFirebase(routeName) {
         const self = this;
-        const route = this.props.firebaseRef.child('rhayadar-route');
+        const route = this.props.firebaseRef.child(routeName);
         route.on("value", function (snapshot) {
             self.setState({ route: snapshot.val().track[0].track });
             self.setState({ elevation: snapshot.val().elevation[0] });

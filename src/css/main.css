@@ -30,15 +30,15 @@ a {
         
 .axis path, .axis line {
     fill: none;
-    stroke: white;
+    stroke: #464646;
 }
 
 .area {
-    fill: #666;
+    fill: #C8042B;
 }
 
 .x.label, .y.label, .x.axis, .y.axis {
-    fill: white;
+    fill: #464646;
 }
         
 .event-layer {

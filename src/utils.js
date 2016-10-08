@@ -6,6 +6,11 @@ export const replaceAll = (find: string, replace: string, fullText: string): str
     return fullText.replace(new RegExp(find, 'g'), replace);
 }
 
+export const lastPathInUrl = (url) => {
+    let parts = url.split('/');
+    return parts[parts.length - 1];
+}
+
 export const arrayToString = (array): string => {
     let text = '';
     for (let item of array) {

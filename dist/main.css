@@ -4,13 +4,13 @@ html, body {
     padding: 0;
 }
 
-#map-container {
-    height: 80vh;
+#map {
+    height: 100%;
     width: 100%;
 }
 
-#map {
-    height: 100%;
+#map-container {
+    height: 80vh;
     width: 100%;
 }
 
@@ -23,22 +23,35 @@ a {
     text-decoration: none;
 }
 
-/* Elevation Chart */
-.hidden {
-    display: none;
-}
-        
+/* Elevation Chart */      
 .axis path, .axis line {
     fill: none;
-    stroke: white;
+    stroke: #464646;
 }
 
 .area {
-    fill: #666;
+    fill: #C8042B;
 }
 
-.x.label, .y.label, .x.axis, .y.axis {
+.area svg {
+    padding-bottom: 20px;
+}
+
+.y.label, .x.axis, .y.axis {
+    fill: #464646;
+    font-family: Arial;
+    font-size: 12px;
+}
+
+.x.label {
     fill: white;
+    font-family: Arial;
+    font-size: 12px;
+}
+
+.tick text {
+    font-family: Arial;
+    font-size: 10px;
 }
         
 .event-layer {
