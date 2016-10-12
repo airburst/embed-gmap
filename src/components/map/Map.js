@@ -27,8 +27,8 @@ export class Map extends React.Component {
         zoom: 15,
         path: [],
         initialCenter: {
-            lat: 51.417163327836576,
-            lng: -2.210025647776225
+            lat: 51.309490,
+            lng: -2.217110
         },
         centerAroundCurrentLocation: true
     }
